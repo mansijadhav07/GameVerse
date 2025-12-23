@@ -1,67 +1,58 @@
-import { useState, FormEvent } from "react"; // Added FormEvent
+import { useState, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// Removed shadcn imports
-// Replace lucide-react icons with phosphor-icons
 import { GameController, EnvelopeSimple, LockKey } from "@phosphor-icons/react";
-// Removed Navbar import
 import axios from 'axios';
-// Use relative path for AuthContext
 import { useAuth } from "../context/AuthContext";
+
+// --- DYNAMIC API URL CONFIGURATION ---
+// This uses the Railway variable if it exists, otherwise falls back to your local port
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [message, setMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // Added loading state
-  const { login } = useAuth(); // Get the login function from context
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => { // Corrected event type
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setMessage('');
-    setIsLoading(true); // Set loading
+    setIsLoading(true);
     try {
-      const response = await axios.post('http://localhost:3001/api/login', formData);
-      login(response.data.token); // Use the context login function
+      // UPDATED: Now uses the dynamic API_URL variable
+      const response = await axios.post(`${API_URL}/api/login`, formData);
+      
+      login(response.data.token);
       console.log('Login successful');
-      navigate('/'); // Redirect to home page after login
+      navigate('/'); 
     } catch (error: any) {
       console.error('Login error:', error.response ? error.response.data : error.message);
-      setMessage(error.response?.data?.message || 'Login failed. Please check your credentials.'); // Improved error message
+      setMessage(error.response?.data?.message || 'Login failed. Please check your credentials.');
     } finally {
-      setIsLoading(false); // Unset loading
+      setIsLoading(false);
     }
   };
 
   return (
-    // Removed outer div and Navbar
-    // Use min-h-screen on the main container to center vertically
     <main className="min-h-screen flex items-center justify-center py-12 px-4 relative overflow-hidden">
-        {/* Particle Background - Reuse from App.tsx if needed, or omit if App.tsx handles it globally */}
-        {/* If App.tsx handles background globally, this main tag might not need min-h-screen */}
-
-        {/* Glassmorphism Card */}
         <div className="relative z-10 w-full max-w-md animate-fade-in">
              <div className="text-center mb-8">
                <Link to="/" className="inline-flex items-center gap-2 mb-4 group">
-                 {/* Styled Icon */}
                  <div className="p-3 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl shadow-lg shadow-purple-500/30 group-hover:shadow-purple-400/50 transition-all duration-300">
                    <GameController size={32} className="text-white" weight="fill"/>
                  </div>
-                 {/* Brand Text */}
-                 {/* <span data-font-orbitron className="text-2xl font-bold text-white text-glow-purple group-hover:text-purple-300 transition-colors">GameVerse</span> */}
                </Link>
                <h1 data-font-orbitron className="text-3xl font-bold mb-2 text-white text-glow-blue">Welcome Back</h1>
                <p className="text-gray-400">Log in to your GameVerse account</p>
              </div>
 
-            {/* Form Card */}
             <div className="bg-gray-900/60 backdrop-blur-md border border-purple-500/30 rounded-lg shadow-2xl shadow-purple-500/10 p-6 sm:p-8">
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Email Input */}
                 <div className="space-y-2">
                   <label htmlFor="email" className="text-sm font-medium text-gray-300">Email</label>
                   <div className="relative">
@@ -78,12 +69,11 @@ const Login = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      disabled={isLoading} // Disable input when loading
+                      disabled={isLoading}
                     />
                   </div>
                 </div>
 
-                {/* Password Input */}
                 <div className="space-y-2">
                   <label htmlFor="password" className="text-sm font-medium text-gray-300">Password</label>
                   <div className="relative">
@@ -100,22 +90,15 @@ const Login = () => {
                       value={formData.password}
                       onChange={handleChange}
                       required
-                      disabled={isLoading} // Disable input when loading
+                      disabled={isLoading}
                     />
                   </div>
-                   {/* Optional: Add Forgot Password link */}
-                   {/* <div className="text-right">
-                       <Link to="/forgot-password" className="text-xs text-purple-400 hover:underline">
-                           Forgot Password?
-                       </Link>
-                   </div> */}
                 </div>
 
-                {/* Submit Button */}
                 <button
                   type="submit"
-                  className="neon-button w-full flex justify-center items-center gap-2" // Use neon-button class
-                  disabled={isLoading} // Disable button when loading
+                  className="neon-button w-full flex justify-center items-center gap-2"
+                  disabled={isLoading}
                 >
                    {isLoading ? (
                        <>
@@ -146,4 +129,3 @@ const Login = () => {
 };
 
 export default Login;
-

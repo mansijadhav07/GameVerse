@@ -1,76 +1,72 @@
-import { useState, FormEvent } from "react"; // Added FormEvent
+import { useState, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// Removed shadcn imports
-// Replace lucide-react icons with phosphor-icons
 import { GameController, EnvelopeSimple, LockKey, User, ShieldCheckered } from "@phosphor-icons/react";
-// Removed Navbar import
 import axios from 'axios';
 
-// No need for useAuth here unless checking if already logged in
+// --- DYNAMIC API URL CONFIGURATION ---
+// Fallback to 3001 for local work, use Railway variable for production
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    username: "", // Changed from f_name based on form
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
   const [message, setMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // Added loading state
-  const [activeTab, setActiveTab] = useState<'user' | 'admin'>('user'); // State for active tab
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<'user' | 'admin'>('user');
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handles submission for both user and admin based on activeTab
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setMessage('');
-    setIsLoading(true); // Set loading
+    setIsLoading(true);
 
     if (formData.password !== formData.confirmPassword) {
       setMessage("Passwords do not match.");
-      setIsLoading(false); // Reset loading
+      setIsLoading(false);
       return;
     }
-    if (formData.password.length < 6) { // Example: Basic password length validation
+    if (formData.password.length < 6) {
         setMessage("Password must be at least 6 characters long.");
         setIsLoading(false);
         return;
     }
 
     const userData = {
-      // Assuming backend expects f_name and l_name separately
-      // You might need to adjust this based on your backend API structure
-      f_name: formData.username, // Send username as f_name
-      l_name: activeTab === 'admin' ? 'Admin' : 'User', // Default l_name or add another form field
+      f_name: formData.username,
+      l_name: activeTab === 'admin' ? 'Admin' : 'User',
       email: formData.email,
       password: formData.password,
-      role: activeTab // Use the active tab state for the role
+      role: activeTab
     };
 
     try {
-      await axios.post('http://localhost:3001/api/signup', userData);
+      // UPDATED: Now points to the dynamic cloud or local URL
+      await axios.post(`${API_URL}/api/signup`, userData);
+      
       setMessage(`Success! ${activeTab} account created. Redirecting to login...`);
-      setFormData({ username: "", email: "", password: "", confirmPassword: "" }); // Clear form
-      // Add a small delay before navigating to show the success message
+      setFormData({ username: "", email: "", password: "", confirmPassword: "" });
+      
       setTimeout(() => {
         navigate('/login');
       }, 2000);
     } catch (error: any) {
-      console.error('There was an error signing up:', error.response ? error.response.data : error.message);
+      console.error('Signup error:', error.response ? error.response.data : error.message);
       setMessage(error.response?.data?.message || `Error signing up as ${activeTab}.`);
     } finally {
-      // Don't reset loading immediately if navigating after timeout
       if (!message.startsWith('Success')) {
           setIsLoading(false);
       }
     }
   };
 
-  // Common input fields structure
   const renderFormFields = (role: 'user' | 'admin') => (
     <>
       <div className="space-y-2">
@@ -119,9 +115,7 @@ const Register = () => {
   );
 
   return (
-    // Removed outer div and Navbar
     <main className="min-h-screen flex items-center justify-center py-12 px-4 relative overflow-hidden">
-      {/* Glassmorphism Card */}
       <div className="relative z-10 w-full max-w-md animate-fade-in">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-4 group">
@@ -133,9 +127,7 @@ const Register = () => {
           <p className="text-gray-400">Create your account and start gaming</p>
         </div>
 
-        {/* Form Card */}
         <div className="bg-gray-900/60 backdrop-blur-md border border-purple-500/30 rounded-lg shadow-2xl shadow-purple-500/10 p-6 sm:p-8">
-          {/* Tabs */}
           <div className="mb-6">
             <div className="flex border border-gray-700 rounded-lg p-1 bg-gray-950/50">
               <button
@@ -161,13 +153,12 @@ const Register = () => {
             </div>
           </div>
 
-          {/* Form Content */}
           <form onSubmit={handleSubmit} className="space-y-6">
              {activeTab === 'user' ? renderFormFields('user') : renderFormFields('admin')}
 
             <button
               type="submit"
-              className={`neon-button w-full flex justify-center items-center gap-2 ${activeTab === 'admin' ? 'neon-button-blue' : ''}`} // Use blue variant for admin
+              className={`neon-button w-full flex justify-center items-center gap-2 ${activeTab === 'admin' ? 'neon-button-blue' : ''}`}
               disabled={isLoading}
             >
               {isLoading ? (
