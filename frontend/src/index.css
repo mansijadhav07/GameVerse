@@ -1,0 +1,175 @@
+/* Reset & Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap');
+
+/* Apply Tailwind base, components, utilities */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global Styles & Variables */
+body {
+  @apply bg-gray-950 text-gray-200 font-['Inter',_sans-serif] antialiased scroll-smooth;
+  scrollbar-color: #8b5cf6 #1f2937; /* thumb track */
+}
+
+/* Custom Scrollbar for Webkit */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #1f2937; /* Darker track */
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #8b5cf6; /* Purple thumb */
+  border-radius: 10px;
+  border: 2px solid #1f2937; /* Creates padding around thumb */
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a78bfa; /* Lighter purple on hover */
+}
+
+/* Page Transition Animation */
+.page-content {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* General Neon Glows */
+.text-glow-purple { text-shadow: 0 0 8px rgba(192, 132, 252, 0.5), 0 0 20px rgba(192, 132, 252, 0.3); }
+.text-glow-blue { text-shadow: 0 0 8px rgba(59, 130, 246, 0.5), 0 0 20px rgba(59, 130, 246, 0.3); }
+
+/* Stronger Neon Glow (for Hero) */
+.text-glow-blue-strong {
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.7), /* Primary blue glow */
+                 0 0 25px rgba(59, 130, 246, 0.5), /* Wider blue glow */
+                 0 0 40px rgba(59, 130, 246, 0.3); /* Even wider, softer blue glow */
+}
+
+/* Font helpers */
+[data-font-orbitron] { font-family: 'Orbitron', sans-serif; }
+
+/* Global Neon Button Style */
+.neon-button {
+  @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-md shadow-sm transition-all duration-300 ease-in-out bg-purple-600 text-white hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 focus:ring-offset-gray-950 hover:shadow-lg hover:shadow-purple-500/40;
+  /* Add initial slight glow */
+  box-shadow: 0 0 5px rgba(168, 85, 247, 0.5), 0 0 10px rgba(168, 85, 247, 0.3);
+}
+
+.neon-button-pulse:hover {
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.8), /* Stronger purple glow */
+                0 0 30px rgba(168, 85, 247, 0.6),
+                0 0 45px rgba(168, 85, 247, 0.4);
+    transform: scale(1.03); /* Subtle scale for interaction */
+}
+
+/* Smaller Neon Button */
+.neon-button-small {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md shadow-sm transition-all duration-300 ease-in-out bg-purple-600 text-white hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 focus:ring-offset-gray-950 hover:shadow-lg hover:shadow-purple-500/40;
+  box-shadow: 0 0 3px rgba(168, 85, 247, 0.5), 0 0 6px rgba(168, 85, 247, 0.3);
+}
+.neon-button-small:hover {
+     box-shadow: 0 0 10px rgba(168, 85, 247, 0.8),
+                 0 0 20px rgba(168, 85, 247, 0.6);
+     transform: scale(1.03);
+}
+
+/* Glassmorphism Card Style (for Modals, Admin) */
+.admin-card {
+  @apply bg-gray-800/40 backdrop-blur-md border border-purple-500/30 rounded-lg shadow-lg;
+}
+
+/* Navbar Link Styling (FIXED HOVER/ACTIVE CENTERING) */
+.nav-link {
+  @apply relative text-gray-300 hover:text-purple-400 transition-colors duration-300 px-3 py-2 text-sm font-medium; /* Added padding */
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  /* Center horizontally */
+  left: 50%;
+  transform: translateX(-50%) scaleX(0); /* Start scaled down and centered */
+  /* Position below */
+  bottom: -6px; /* Adjust vertical position if needed (was -6px, aligned with h-20 navbar) */
+  /* Size */
+  width: 90%; /* Adjust width if needed (e.g., 90% for slight padding) */
+  height: 2px;
+  background-color: #a855f7; /* Purple color */
+  border-radius: 1px;
+  /* Animation */
+  transition: transform 0.3s ease-out;
+  transform-origin: center; /* Scale from the center */
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: translateX(-50%) scaleX(1); /* Scale up from center */
+}
+
+/* Game Card Styles */
+.game-card {
+  @apply bg-gray-800/50 backdrop-blur-sm rounded-lg overflow-hidden border border-purple-500/30 transition-all duration-300 ease-in-out shadow-md hover:shadow-xl hover:shadow-purple-600/20 hover:border-purple-500/60 hover:scale-[1.03] hover:-translate-y-1;
+}
+
+/* Styles for Modals in UserDashboard, GameDetail, etc. */
+.modal-content {
+  @apply bg-gray-900/80 backdrop-blur-lg border border-purple-500/40 rounded-lg shadow-xl p-6 text-gray-200;
+}
+.modal-input {
+   @apply w-full px-4 py-2 rounded-md bg-gray-800/60 border border-gray-700 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-300;
+}
+.modal-label {
+  @apply block text-sm font-medium text-gray-400 mb-1;
+}
+
+/* Styles for Tabs in Register and Friends */
+.tab-list {
+  @apply grid w-full grid-cols-2 mb-6 bg-gray-800/50 rounded-lg p-1 border border-purple-500/30;
+}
+.tab-trigger {
+  @apply inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-gray-400 data-[state=active]:bg-purple-600/40 data-[state=active]:text-purple-300 data-[state=active]:shadow-inner data-[state=active]:shadow-purple-900/50 gap-2;
+}
+.tab-trigger:hover:not([data-state=active]) {
+  @apply text-gray-200 bg-gray-700/30;
+}
+
+/* Styles for Select Dropdown in Leaderboard */
+.styled-select {
+  @apply block w-full md:w-[280px] appearance-none rounded-md border border-purple-500/30 bg-gray-800/60 px-3 py-2 text-gray-200 placeholder-gray-500 shadow-sm focus:border-purple-500 focus:outline-none focus:ring-purple-500 sm:text-sm backdrop-blur-sm;
+}
+
+/* Hero background animation */
+.hero-background-warp {
+  /* You can add a fallback background color */
+  background-color: #0c0a0f; 
+  /* If you have a static grid image: */
+  /* background-image: url('/path/to/your/warpgrid.png'); */
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated gradient overlay */
+.hero-background-warp::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at top left, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+  background-size: 200% 200%;
+  animation: bg-pan 15s ease infinite;
+  z-index: 0;
+}
+
+@keyframes bg-pan {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+

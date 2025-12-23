@@ -1,0 +1,209 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Reset and Base Styles */
+:root {
+  /* Dark Theme Palette */
+  --background: #0d0a1f; /* Deep Space Blue */
+  --foreground: #e0e0e0; /* Light Gray */
+  --card: #1a1533;       /* Dark Purple/Blue */
+  --card-alt: #2c2557;   /* Slightly Lighter Card BG */
+  --card-foreground: var(--foreground);
+  --popover: #1a1533;
+  --popover-foreground: var(--card-foreground);
+  --primary: #8f75ff;     /* Vibrant Purple */
+  --primary-foreground: #ffffff;
+  --secondary: #3b336b;   /* Muted Purple */
+  --secondary-foreground: var(--foreground);
+  --muted: #4a417c;       /* Lighter Muted Purple */
+  --muted-foreground: #a0a0a0; /* Medium Gray Text */
+  --accent: #00f5ff;     /* Neon Cyan */
+  --accent-foreground: #0d0a1f; /* Dark for contrast on accent */
+  --destructive: #ff5555; /* Neon Red */
+  --destructive-foreground: var(--foreground);
+  --border: #3b336b;
+  --input: #2c2557;       /* Input background */
+  --ring: var(--accent);   /* Ring color for focus */
+  --radius: 0.75rem;       /* Slightly larger radius */
+  font-family: 'Poppins', sans-serif;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* Animated Background */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.app-bg {
+  /* Subtle Sci-Fi Gradient */
+  background: linear-gradient(-45deg, #0d0a1f, #1a1533, #2c2557, #3b336b);
+  background-size: 400% 400%;
+  animation: gradientBG 25s ease infinite; /* Slow, subtle animation */
+  min-height: 100vh;
+}
+
+/* App Container for consistent padding/max-width */
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem; /* Horizontal padding */
+}
+
+/* Navbar Styling */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  border-bottom: 1px solid var(--border);
+  background-color: rgba(13, 10, 31, 0.8); /* Match body bg, slightly transparent */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Nav Link Animation */
+.nav-link {
+  position: relative;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  transition: color 0.3s ease;
+  padding: 0.5rem 0.25rem; /* Add some padding */
+  letter-spacing: 0.5px;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px; /* Position slightly below */
+  left: 50%;
+  background: linear-gradient(90deg, var(--accent), var(--primary)); /* Gradient underline */
+  transition: all 0.3s ease-out;
+  transform: translateX(-50%);
+  opacity: 0;
+}
+.nav-link:hover,
+.nav-link.active { /* Use .active class from NavLink */
+  color: var(--foreground);
+}
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+  opacity: 1;
+}
+
+/* Glow Effect for Buttons */
+.glow-button {
+  position: relative;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  z-index: 1;
+  font-weight: 600;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+.glow-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 300%;
+  height: 100%;
+  background: linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, 0.4) 50%, transparent 80%);
+  transition: left 0.6s ease-in-out;
+  z-index: -1;
+  opacity: 0;
+}
+.glow-button:hover {
+  box-shadow: 0 0 15px var(--accent), 0 0 25px var(--primary);
+  transform: translateY(-2px);
+}
+.glow-button:hover::before {
+  left: 100%;
+  opacity: 1;
+}
+
+/* Hero Section Styling */
+.hero-section {
+  padding: 6rem 0 4rem; /* Adjust padding */
+  background: radial-gradient(ellipse at bottom, rgba(31, 41, 55, 0.6) 0%, rgba(13, 10, 31, 0) 70%);; /* Faded radial gradient from bottom */
+}
+
+/* Styled Card Base */
+.styled-card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--card-foreground);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden; /* Important for pseudo-elements */
+}
+
+/* Card Hover Effect with Border Glow */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  border: 1px solid var(--border);
+}
+.card-hover:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 15px var(--accent);
+}
+
+/* Input Glow on Focus */
+.input-glow:focus-visible {
+   box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--accent);
+   outline: none;
+   border-color: var(--accent);
+}
+
+/* Text Glow Effects */
+.text-glow-accent {
+  text-shadow: 0 0 8px var(--accent), 0 0 12px var(--accent);
+}
+
+/* Ensure Dropdown Menu (Select Content) is on top */
+[data-radix-select-content],
+[data-radix-dropdown-menu-content] {
+  z-index: 100 !important;
+  background-color: var(--popover);
+  border: 1px solid var(--border);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Animation Utilities */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+.animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+
+/* Ensure base Tailwind styles are applied */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
